@@ -70,8 +70,12 @@ if spr_file and len(ar_files) == 3:
         spr[f'INV_{i+1}'] = spr['Formatted_Invoices'].apply(lambda x: x[i] if i < len(x) else None)
 
     def build_summary(row):
-        if row['STATUS SM OPERASIONAL'] in ['O14', 'O20']:
+        if (
+            row['STATUS SM OPERASIONAL'] in ['O14', 'O20'] or 
+            row.get('OUTSTANDING INV', 0) == 0
+        ):
             return None
+
         summary = []
         for i in range(max_inv):
             inv = row.get(f'INV_{i+1}')
